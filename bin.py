@@ -12,7 +12,12 @@ api_secret = os.environ.get('BINANCE_API_SECRET')
 client = binance.Client(api_key, api_secret)
 
 # Get top 50 coins
-top_coins = client.get_all_tickers()
+top_coins = client.get_ticker()
+
+for coin in top_coins:
+    coin['quoteVolume'] = float(coin['quoteVolume'])
+    coin['volume'] = float(coin['volume'])
+    coin['lastPrice'] = float(coin['lastPrice'])
 
 # filter for 50 coins with usdt
 top_coins = [coin for coin in top_coins if coin['symbol'].endswith('USDT')][:50]
@@ -86,14 +91,15 @@ for coin in top_coins:
     if not symbol.endswith('USDT'):
         continue
 
-    rate = float(coin['price'])
+    rate = float(coin['lastPrice'])
     change = fetch_and_calculate(symbol)
     result = {
         'Date': datetime.datetime.utcnow().strftime('%Y-%m-%d'),
         'Symbol': symbol,
         'Rate': rate,
         'Time': current_time,
-        **change
+        **change,
+        **coin
     }
     results.append(result)
 
