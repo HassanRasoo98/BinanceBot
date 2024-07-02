@@ -106,7 +106,7 @@ for coin in top_coins:
 # Convert results to DataFrame
 df = pd.DataFrame(results)
 
-current_time_stamp = datetime.datetime.utcnow().strftime('%Y-%m-%d|%H:%M')
+current_time_stamp = datetime.datetime.utcnow().strftime('%Y-%m-%d_%H:%M')
 
 df.to_excel(f"{current_time_stamp}.xlsx", index=False)
 
